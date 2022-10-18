@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellospring-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hellospring-pod
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: hellospring-pod
+    spec:
+      containers:
+      - name: hellospring
+        image: tanzukr.azurecr.io/app/hellospring:latest
+        ports:
+        - containerPort: 8080
+          name: http-web
+---        
+apiVersion: v1
+kind: Service
+metadata:
+  name: hellospring-service
+  labels:
+    app: hellospring-service
+spec:
+  ports:
+  - port: 80
+    targetPort: http-web
+  selector:
+    app: hellospring-pod
+  type: LoadBalancer

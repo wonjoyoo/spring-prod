@@ -1,0 +1,23 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: spring-prod
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    app.kubernetes.io/part-of: spring-prod
+    apps.tanzu.vmware.com/has-tests : "true"
+spec:
+  params:
+  - name: annotations
+    value:
+      autoscaling.knative.dev/min-scale: "1"
+      autoscaling.knative.dev/max-scale: "100"
+      autoscaling.knative.dev/class: kpa.autoscaling.knative.dev
+      autoscaling.knative.dev/metric: concurrency
+      autoscaling.knative.dev/target: "10"
+
+  source:
+    git:
+      url: https://github.com/wonjoyoo/spring-prod
+      ref:
+        branch: main
